@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Home</title>
+<th:block th:insert="fragments/general.html :: headerfiles">
+        </th:block>
+</head>
+<body>
+
+	<div th:insert="fragments/general.html :: navbar"> </div>
+	
+	<!-- Cabecero -->
+    <header id="main-header" class="mt-5 py-3 bg-info text-white">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-5 ms-md-3 my-0 mb-lg-1">
+                        <i class="fas fa-blog"></i> Últimos posts
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Alerts -->
+    <div th:if="${type_alert == 'success'}" 
+    	class="container my-2">
+    	<div class="alert alert-success alert-dismissible fade show" role="alert">
+		  <strong th:text="${text_alert}"></strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+    </div>
+    
+    <div th:if="${type_alert == 'danger'}" 
+    	class="container my-2">
+    	<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		  <strong th:text="${text_alert}"></strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+    </div>
+    
+    <!-- No data show -->
+    <section th:if="${posts.isEmpty()}" class="py-5 text-center container">
+	    <div class="row py-3 my-3 py-lg-5 my-lg-5">
+	      <div class="col-lg-6 col-md-8 mx-auto">
+	        <h1 class="display-5 ml-md-3 "><i class="fas fa-exclamation-triangle"></i> Sin datos para mostrar</h1>
+	      </div>
+	    </div>
+	</section>
+
+	<!-- Listado de posts -->
+	<div class="container ">
+		<div class="row mt-4">
+        <div class="col-lg-6 offset-lg-3">
+          <div class="card shadow mb-3" th:each="p : ${posts}">
+          <div th:if="${p.image != ''}">
+           		<img th:src="@{${p.getImagePath()}}" class="card-img-top" alt="imagen_post" />
+          </div>           
+            <div class="card-body">
+              <div class="row">
+                <div class="col d-flex justify-content-between">
+                <a th:href="@{/posts/{id} (id=${p.id})}" class="card-title fs-5" th:text="${p.title}"></a>
+                <!-- Acciones -->
+                  <div class="d-flex justify-content-end align-items-start">
+                    <a th:href="@{/edit_post/{id} (id=${p.id})}" class="btn btn-info btn-sm mx-2 text-white">
+                    <i class="fas fa-edit"></i></a>
+                    <a th:href="@{/delete/{id} (id=${p.id})}" class="btn btn-danger btn-sm link1">
+                    <i class="fas fa-trash-alt"></i></a>
+                  </div>
+                </div>
+              </div>
+              <h6 class="card-subtitle mb-2 text-muted" th:text="${p.category}"></h6>
+              <p class="card-text">
+                <small class="text-muted">Fecha publicación:</small>
+                <small class="text-muted" th:text="${#calendars.format(p.creationDate, 'dd/MMM/yyyy HH:mm')}"></small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal confirmación eliminar -->
+		<div class="modal fade" id="confirmDelete">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h6 class="modal-title"></h6>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-outline-primary mx-auto w-25" id="modal-btn-si">Sí</button>
+		        <button type="button" class="btn btn-outline-dark mx-auto w-25" data-bs-dismiss="modal">No</button>
+		    </div>
+		    </div>
+		  </div>
+		</div>
+		
+		<div th:insert="fragments/general.html :: footer"></div>
+		
+	</div>
+	
+	<div th:insert="fragments/general.html :: scripts"></div>
+	<script th:src="@{/js/modalDelete.js}"></script>
+	
+	<script>	
+	$('#pagHome').addClass("active");
+	</script>
+	
+</body>
+</html>

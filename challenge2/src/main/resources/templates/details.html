@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Detalle Post</title>
+<th:block th:insert="fragments/general.html :: headerfiles">
+        </th:block>
+</head>
+<body>
+
+	<div th:insert="fragments/general.html :: navbar"> </div>
+	
+	<!-- Cabecero -->
+    <header id="main-header" class="mt-5 py-3 bg-info text-white">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-5 ms-md-3 my-0 mb-lg-1">
+                        <i class="fas fa-blog"></i> Publicación
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+   	<!-- Tarjeta detalle post -->
+	<div class="container ">
+		<div class="row mt-4">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="card shadow mb-3">       
+            <div class="card-body">
+              <div class="row">
+              	<h3 class="card-title" th:text="${post.title}"></h3>
+              	<h6 class="card-subtitle mb-2 text-muted" th:text="${post.category}"></h6>
+	            <p class="card-text">
+	                <small class="text-muted">Fecha publicación:</small>
+	                <small class="text-muted" th:text="${#calendars.format(post.creationDate, 'dd/MMM/yyyy HH:mm')}"></small>
+	            </p>
+	            <div class="col-lg-8 offset-lg-2" th:if="${post.image != ''}">
+           			<img th:src="@{${post.getImagePath()}}" class="card-img" alt="imagen_post" />
+          		</div>  
+	            <p class="card-text" th:text="${post.body}"></p>  
+	            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+		
+		<div th:insert="fragments/general.html :: footer"></div>		
+	</div>
+	
+	<div th:insert="fragments/general.html :: scripts"></div>
+	<script type="text/javascript" th:src="@{/js/validateFormBootstrap.js}"></script>
+	
+	<script>	
+	$('#pagForm').addClass("active");
+	</script>
+	
+</body>
+</html>

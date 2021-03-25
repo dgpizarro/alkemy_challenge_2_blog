@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Formulario</title>
+<th:block th:insert="fragments/general.html :: headerfiles">
+        </th:block>
+</head>
+<body>
+
+	<div th:insert="fragments/general.html :: navbar"> </div>
+	
+	<!-- Cabecero -->
+    <header id="main-header" class="mt-5 py-3 bg-info text-white">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <h1 class="display-5 ms-md-3 my-0 mb-lg-1">
+                        <i class="fas fa-share-alt"></i> Nuevo post
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+	<div class="container ">
+		
+	<!-- Formulario -->
+		<div class="row">
+			<div class=" card col-lg-6 offset-lg-3 mt-3 shadow">
+			
+				<div class="card-body">
+				
+				<form class="needs-validation" novalidate th:action="@{/posts}" th:object="${post}" method="POST" enctype="multipart/form-data">
+
+					 <input type="hidden" th:field="*{id}" />
+					 <input type="hidden" th:field="*{image}" />
+					 					
+					<label class="form-label fw-bold" for="title">Título</label>
+					<div class="input-group mb-3">
+						 <input name="title"
+							class="form-control" id="title" th:field="*{title}"
+							maxlength="250" required />
+						<div class="invalid-feedback">
+                        Título requerido
+                        </div>
+					</div>
+
+					<label class="form-label fw-bold" for="category">Categoría</label>
+					<select class="form-select mb-3" th:field="*{category}" id="category">
+						<option th:value="Domótica" th:text="Domótica"></option>
+					    <option th:value="Electromovilidad" th:text="Electromovilidad"></option>
+					    <option th:value="Fintech" th:text="Fintech"></option>				   
+					    <option th:value="Gadgets" th:text="Gadgets"></option>
+					    <option th:value="Móviles" th:text="Móviles"></option>
+					    <option th:value="Televisores" th:text="Televisores"></option>
+					</select>
+					
+					<label class="form-label fw-bold" for="body">Contenido</label>
+					<div class="input-group mb-3">						
+						<textarea name="body" class="form-control" id="body"
+							th:field="*{body}" rows="3" maxlength="1000" required /></textarea>
+						<div class="invalid-feedback">
+                        Contenido requerido
+                        </div>
+					</div>
+					
+					<div class="input-group" th:if="${post.image != null}" >
+						<span class="form-label fw-bold">Imagen actual:&nbsp;</span>
+						<span th:text="*{image}"></span>
+          			</div>  
+
+					<label for="imageUpload" class="form-label fw-bold">Seleccione imagen</label>
+					<div class="input-group mb-3">
+						<input class="form-control" type="file"
+							id="imageUpload" name="imageUpload" accept="image/png, image/jpeg">
+					</div>
+
+					<div class="row my-4 d-flex justify-content-around">
+						<div class="col-lg-6 d-grid gap-2">
+							<button class="btn btn-primary shadow" type="submit">Guardar</button>
+						</div>
+					</div>
+
+				</form>
+				</div>
+
+			</div>
+		</div>
+		
+		<div th:insert="fragments/general.html :: footer"></div>
+		
+	</div>
+	
+	<div th:insert="fragments/general.html :: scripts"></div>
+	<script type="text/javascript" th:src="@{/js/validateFormBootstrap.js}"></script>
+	
+	<script>	
+	$('#pagForm').addClass("active");
+	</script>
+</body>
+</html>
+
+
