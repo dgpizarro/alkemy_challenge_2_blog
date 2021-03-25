@@ -10,9 +10,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "post")
+@SQLDelete(sql = "UPDATE post SET deleted=true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class Post {
 
     @Id
@@ -35,6 +39,9 @@ public class Post {
     @Column(updatable = false)
     @CreationTimestamp
     private Date creationDate;
+
+    @Column()
+    private Boolean deleted = false;
 
     public int getId() {
         return id;
@@ -82,6 +89,14 @@ public class Post {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     @Transient

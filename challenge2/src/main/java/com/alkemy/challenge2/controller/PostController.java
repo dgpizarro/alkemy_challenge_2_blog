@@ -17,6 +17,7 @@ import com.alkemy.challenge2.entity.Post;
 import com.alkemy.challenge2.service.PostService;
 import com.alkemy.challenge2.util.FileUploadUtil;
 
+
 @Controller()
 public class PostController {
 
