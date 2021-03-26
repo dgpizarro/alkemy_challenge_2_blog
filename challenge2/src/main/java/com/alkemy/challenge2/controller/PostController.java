@@ -49,12 +49,14 @@ public class PostController {
     }
 
     @GetMapping("/posts/{id}")
-    public String goDetails(@PathVariable int id, Model m) {
+    public String goDetails(@PathVariable int id, Model m, RedirectAttributes redirectAtr) {
         Optional<Post> post_find = ps.getPostById(id);
         if (post_find.isPresent()) {
             m.addAttribute("post", post_find.get());
             return "details";
         }
+        redirectAtr.addFlashAttribute("type_alert", "danger");
+        redirectAtr.addFlashAttribute("text_alert", "¡Post no encontrado!");
         return "redirect:/posts";
     }
 
