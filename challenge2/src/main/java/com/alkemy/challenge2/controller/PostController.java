@@ -1,11 +1,16 @@
 package com.alkemy.challenge2.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alkemy.challenge2.entity.Post;
 import com.alkemy.challenge2.service.PostService;
-import com.alkemy.challenge2.util.FileUploadUtil;
 
 
 @Controller()
@@ -62,7 +66,7 @@ public class PostController {
 
     @PostMapping("/posts")
     public String savePost(Post p, final @RequestParam("imageUpload") MultipartFile file, RedirectAttributes redirectAtr) {
-       
+        
         if (file.isEmpty()) {
             try {
                 ps.addEditPost(p);
@@ -73,16 +77,13 @@ public class PostController {
                 redirectAtr.addFlashAttribute("type_alert", "danger");
                 redirectAtr.addFlashAttribute("text_alert", "¡Ocurrió un error al guardar el Post!");
                 return "redirect:/posts";
-            }
+            }  
         } else {
             try {
-                String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-                p.setImage(fileName);
-                Post savedPostWithPhoto = ps.addEditPost(p);
-
-                String uploadDir = "post-photos/" + savedPostWithPhoto.getId();
-                FileUploadUtil.saveFile(uploadDir, fileName, file);
-                
+                String image_name = file.getOriginalFilename();
+                p.setImage(file.getBytes());
+                p.setImage_name(image_name);
+                ps.addEditPost(p);
                 redirectAtr.addFlashAttribute("type_alert", "success");
                 redirectAtr.addFlashAttribute("text_alert", "¡Post guardado correctamente!");
                 return "redirect:/posts";
@@ -106,6 +107,18 @@ public class PostController {
             redirectAtr.addFlashAttribute("text_alert", "¡Ocurrió un error al eliminar el Post!");
             return "redirect:/posts";
         }
+    }
+    
+    @GetMapping("/post/image/{id}")
+    public void showProductImage(@PathVariable int id, HttpServletResponse response) throws IOException {
+        response.setContentType("image/jpeg"); 
+    
+        Optional<Post> post_find = ps.getPostById(id);
+        if (post_find.isPresent()) {
+            InputStream is = new ByteArrayInputStream(post_find.get().getImage());
+            IOUtils.copy(is, response.getOutputStream());
+        }
+           
     }
 
 }

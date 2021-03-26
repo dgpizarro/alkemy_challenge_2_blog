@@ -54,9 +54,9 @@
 		<div class="row mt-4">
         <div class="col-lg-6 offset-lg-3">
           <div class="card shadow mb-3" th:each="p : ${posts}">
-          <div th:if="${p.image != ''}">
-           		<img th:src="@{${p.getImagePath()}}" class="card-img-top" alt="imagen_post" />
-          </div>           
+          <div th:if="${p.image_name != ''}">
+           		<img th:src="@{'/post/image/' + ${p.id}}" class="card-img-top" alt="imagen_post" />
+          </div>
             <div class="card-body">
               <div class="row">
                 <div class="col d-flex justify-content-between">

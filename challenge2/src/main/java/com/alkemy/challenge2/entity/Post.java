@@ -6,12 +6,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
 
 @Entity
 @Table(name = "post")
@@ -29,9 +31,13 @@ public class Post {
 
     @Column(length = 1000, nullable = false)
     private String body;
-
+    
+    @Lob
     @Column()
-    private String image;
+    private byte[] image;
+    
+    @Column()
+    private String image_name;
 
     @Column(length = 250)
     private String category;
@@ -41,7 +47,11 @@ public class Post {
     private Date creationDate;
 
     @Column()
-    private Boolean deleted = false;
+    private Boolean deleted;
+    
+    public Post() {
+        this.deleted = false;
+    }
 
     public int getId() {
         return id;
@@ -67,11 +77,11 @@ public class Post {
         this.body = body;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -99,11 +109,13 @@ public class Post {
         this.deleted = deleted;
     }
 
-    @Transient
-    public String getImagePath() {
-        if (image == null || id == 0)
-            return null;
-        return "/post-photos/" + id + "/" + image;
+    public String getImage_name() {
+        return image_name;
     }
 
+    public void setImage_name(String image_name) {
+        this.image_name = image_name;
+    }
+
+    
 }

@@ -36,8 +36,8 @@
 	                <small class="text-muted">Fecha publicación:</small>
 	                <small class="text-muted" th:text="${#calendars.format(post.creationDate, 'dd/MMM/yyyy HH:mm')}"></small>
 	            </p>
-	            <div class="col-lg-8 offset-lg-2" th:if="${post.image != ''}">
-           			<img th:src="@{${post.getImagePath()}}" class="card-img" alt="imagen_post" />
+	            <div class="col-lg-8 offset-lg-2" th:if="${post.image_name != ''}">
+           			<img th:src="@{'/post/image/' + ${post.id}}" class="card-img" alt="imagen_post" />
           		</div>  
 	            <p class="card-text" th:text="${post.body}"></p>  
 	            </div>
