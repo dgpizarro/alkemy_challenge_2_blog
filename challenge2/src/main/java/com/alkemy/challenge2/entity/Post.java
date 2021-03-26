@@ -33,6 +33,7 @@ public class Post {
     private String body;
     
     @Lob
+    @Column()
     private byte[] image;
     
     @Column()
